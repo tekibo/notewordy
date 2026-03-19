@@ -1,8 +1,7 @@
 <script setup lang="ts">
 
 onMounted(() => {
-  // @ts-ignore
-  window.electron.ready();
+  window.electron.nuxtReady();
 })
 </script>
 

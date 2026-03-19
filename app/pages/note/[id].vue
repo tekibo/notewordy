@@ -29,11 +29,13 @@ watchDebounced(content, (newContent) => {
 
 <template>
     <AppHeader>
-        <Input v-model="title" class="flex-1 max-w-120" placeholder="Title" />
-        <div class="flex-1 flex justify-end gap-2">
+        <template #left>
+            <Input v-model="title" class="flex-1" placeholder="Title" />
+        </template>
+        <template #right>
             <Count :count="wordCount" title="Words" />
             <Count :count="pageCount" title="Page" />
-        </div>
+        </template>
     </AppHeader>
     <div class="flex h-full w-full p-2">
         <Textarea v-model="content" class="

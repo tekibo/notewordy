@@ -82,10 +82,10 @@ export function createSplash(options: SplashScreenOptions) {
         hide();
     };
 
-    ipcMain.once('ready', listener);
+    ipcMain.once("nuxtReady", listener);
 
     splashScreen.on('closed', () => {
-        ipcMain.removeListener('ready', listener);
+        ipcMain.removeListener("nuxtReady", listener);
     });
 }
 export type { SplashConfig } from './template.js';

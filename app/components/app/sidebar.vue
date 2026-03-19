@@ -1,4 +1,14 @@
 <script setup lang="ts">
+import { Icon } from '@iconify/vue';
+
+const { rawQuery, searchNotes, addNote, backendReady, refreshNotes } = useNotes();
+
+watch(backendReady, (ready) => {
+    if (ready) {
+        console.log("Backend is ready, refreshing notes...");
+        refreshNotes();
+    }
+})
 
 </script>
 
@@ -10,10 +20,16 @@
                     <img src="assets/logo.png" class="size-8">
                     NoteWordy
                 </NuxtLink>
-                <NoteAdd />
             </div>
         </SidebarHeader>
         <SidebarContent>
+            <div class="p-2 flex flex-col gap-2 w-full">
+                <Input v-model="rawQuery" placeholder="Search" @input="searchNotes(rawQuery)" />
+                <Button class="w-full" @click="addNote">
+                    <span class="text-sm">New Note</span>
+                    <Icon icon="lucide:plus" />
+                </Button>
+            </div>
             <SidebarGroup>
                 <SidebarGroupLabel>Notes</SidebarGroupLabel>
                 <SidebarGroupContent>

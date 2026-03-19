@@ -42,6 +42,7 @@
     "@iconify/vue": "^5.0.0",
     "@nuxtjs/color-mode": "^4.0.0",
     "@tailwindcss/vite": "^4.2.1",
+    "@types/node": "^25.5.0",
     "concurrently": "^9.2.1",
     "cross-env": "^10.1.0",
     "electron": "^41.0.2",

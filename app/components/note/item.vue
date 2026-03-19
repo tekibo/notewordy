@@ -1,16 +1,15 @@
 <script setup lang="ts">
 const { notes, hasNotes } = useNotes();
+const route = useRoute();
+const activeNote = (id: string) => route.params.id === id;
 </script>
 
 <template>
-    <SidebarMenuItem v-if="hasNotes" v-for="(note, i) in notes" :key="i">
+    <SidebarMenuItem v-if="hasNotes" v-for="(note, i) in notes" :key="i" @click="navigateTo(`/note/${note.id}`)">
         <NoteActions :note-id="note.id">
-            <SidebarMenuButton as-child>
+            <SidebarMenuButton as-child :is-active="activeNote(note.id)">
                 <div class="flex justify-between items-center group/note">
-                    <NuxtLink :to="`/note/${note.id}`">
-                        {{ note.title }}
-                    </NuxtLink>
-
+                    {{ note.title }}
                 </div>
             </SidebarMenuButton>
         </NoteActions>

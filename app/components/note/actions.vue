@@ -39,5 +39,3 @@ const handleDelete = () => {
         </DialogContent>
     </Dialog>
 </template>
-
-<style lang="scss" scoped></style>

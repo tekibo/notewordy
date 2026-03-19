@@ -9,15 +9,9 @@
     <div class="flex flex-1 flex-col gap-4 p-4 pt-0">
         <Card>
             <CardHeader>
-                <CardTitle>Card Title</CardTitle>
-                <CardDescription>Card Description</CardDescription>
+                <CardTitle>Welcome to Notewordy</CardTitle>
+                <CardDescription>A simple, fast, and secure note-taking app for your desktop.</CardDescription>
             </CardHeader>
-            <CardContent>
-                <p>Card Content</p>
-            </CardContent>
-            <CardFooter>
-                <p>Card Footer</p>
-            </CardFooter>
         </Card>
     </div>
 

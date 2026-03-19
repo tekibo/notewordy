@@ -3,9 +3,17 @@ import path from "path";
 import { isDev } from "./util.js";
 
 export function getPreloadPath() {
+    return getSafePath('/dist-electron/preload.cjs')
+}
+
+export function getIconPath() {
+    return getSafePath('/desktopIcon.png')
+}
+
+export function getSafePath(path: string) {
     return getRelativePath(
         isDev() ? '.' : '..',
-        '/dist-electron/preload.cjs'
+        path
     )
 }
 

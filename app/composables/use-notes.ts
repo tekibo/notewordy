@@ -1,21 +1,35 @@
-export type Note = {
-    id: string;
-    title: string;
-    content: string;
-    createdAt: string;
-    updatedAt: string;
-}
+import { useDebounceFn } from '@vueuse/core';
+import { formatForIpc, normalizeNote, sortNotes } from '~/lib/note-actions';
 
 export function useNotes() {
-    const notes = useState<Note[]>('notes', () => [] as Note[]);
+    const backend = window.electron;
+
+    const isReady = computedAsync(async () => await backend.electronReady());
+    const route = useRoute();
+
+    const notes = useState<Note[]>('notes', () => []);
+
+    const hasNotes = computed(() => notes.value.length > 0);
+
+    const rawQuery = shallowRef("");
 
 
-    const hasNotes = computed(() => notes.value.length > 0)
+    const refreshNotes = async () => {
+        if (!isReady.value) return;
 
-    const addNote = () => {
+        const data = await backend.notes.list();
+        notes.value = data.map(normalizeNote);
+
+        sortNotes(notes.value);
+    };
+
+    const addNote = async () => {
+        if (!isReady.value) return;
+
         const now = new Date();
         const id = Date.now().toString();
-        notes.value.push({
+
+        const newNote: Note = normalizeNote({
             id,
             title: "Untitled",
             content: "",
@@ -23,50 +37,103 @@ export function useNotes() {
             updatedAt: now.toISOString()
         });
 
-        sortNotes();
+        notes.value.push(newNote);
 
-        navigateTo(`/note/${id}`);
-    }
+        try {
+            await backend.notes.save(JSON.parse(JSON.stringify(newNote)));
+            sortNotes(notes.value);
+            navigateTo(`/note/${id}`);
+        } catch (error) {
+            notes.value = notes.value.filter((n) => n.id !== id);
+            console.error("Failed to add note", error);
+        }
+    };
 
     const getNote = (id: string) => {
-        return notes.value.find((note) => note.id === id)
-    }
+        return notes.value.find((note) => note.id === id);
+    };
 
     const goToNote = (id: string) => {
         navigateTo(`/note/${id}`);
-    }
+    };
 
-    const deleteNote = (id: string) => {
-        notes.value = notes.value.filter((note) => note.id !== id)
-        sortNotes();
-        navigateTo('/')
-    }
+    const deleteNote = async (id: string) => {
+        const note = getNote(id);
+        if (!note) return;
 
-    const updateNote = ({ id, title, content }: { id: string, title?: string, content?: string }) => {
-        notes.value = notes.value.map((note) => {
-            if (note.id === id) {
-                if (title) note.title = title;
-                if (content) note.content = content;
+        notes.value = notes.value.filter((n) => n.id !== id);
+
+        try {
+            await backend.notes.delete(id);
+            sortNotes(notes.value);
+
+            if (route.params.id === id) {
+                navigateTo('/');
+            }
+        } catch (error) {
+            notes.value.push(note);
+            sortNotes(notes.value);
+            console.error("Failed to delete note", error);
+        }
+    };
+
+    const updateNote = async (updatedNote: Partial<Note>) => {
+        if (!isReady.value) return;
+
+        const oldNotes = [...notes.value];
+
+        notes.value = oldNotes.map((note) => {
+            if (note.id === updatedNote.id) {
+                if (updatedNote.title !== undefined) note.title = updatedNote.title;
+                if (updatedNote.content !== undefined) note.content = updatedNote.content;
+
                 note.updatedAt = new Date().toISOString();
+
+                note._search = (note.title + " " + note.content).toLowerCase();
             }
             return note;
-        })
-        sortNotes();
-    }
+        });
 
-    const sortNotes = () => {
-        notes.value.sort((a, b) => {
-            return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-        })
-    }
+        try {
+            await backend.notes.saveAllNotes(formatForIpc(notes.value));
+            sortNotes(notes.value);
+        } catch (error) {
+            notes.value = oldNotes;
+            console.error("Failed to save all notes", error);
+        }
+    };
+
+
+    const _search = async (query: string) => {
+        if (!query || query === "") {
+            await refreshNotes();
+            return;
+        }
+
+        const q = query.toLowerCase();
+
+        notes.value = notes.value.filter((note) =>
+            note._search?.includes(q)
+        );
+    };
+
+    const searchNotes = useDebounceFn(_search, 150);
 
     return {
         notes,
+        hasNotes,
+
         addNote,
         deleteNote,
         updateNote,
-        hasNotes,
+
         getNote,
-        goToNote
-    }
+        goToNote,
+        refreshNotes,
+
+        searchNotes,
+        rawQuery,
+
+        backendReady: isReady
+    };
 }
