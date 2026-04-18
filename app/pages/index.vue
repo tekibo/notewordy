@@ -3,7 +3,7 @@
 
 <template>
     <AppHeader />
-    <div class="flex flex-1 flex-col gap-4 p-4 pt-0">
+    <div class="flex flex-1 flex-col gap-4 p-4 pt-0 mt-7">
         <Card>
             <CardHeader>
                 <CardTitle>Welcome to Notewordy</CardTitle>

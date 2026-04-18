@@ -1,5 +1,5 @@
 import { app } from "electron";
-import { listNotes, saveNote, deleteNote, saveAllNotes } from "./notes.js";
+import { listNotes, saveNote, deleteNote, saveAllNotes, backupNotes, importNotes } from "./notes.js";
 import { ipcHandle } from "../util.js";
 
 export function setupIpcHandlers() {
@@ -21,5 +21,13 @@ export function setupIpcHandlers() {
 
     ipcHandle("saveAllNotes", async (_, notes: Note[]) => {
         saveAllNotes(notes);
+    });
+
+    ipcHandle("backupNotes", async () => {
+        return backupNotes();
+    });
+
+    ipcHandle("importNotes", async () => {
+        return importNotes();
     });
 }

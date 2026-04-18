@@ -42,7 +42,7 @@ watchDebounced(content, (newContent) => {
             w-full 
             resize-none 
             border-none 
-            leading-relaxed
+            leading-loose
             focus-visible:border-none 
             focus-visible:ring-transparent" placeholder="Write something..." />
     </div>

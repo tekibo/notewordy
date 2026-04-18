@@ -14,6 +14,8 @@ type EventPayloadMapping = {
     saveNote: (note: Note) => Promise<void>;
     deleteNote: (id: string) => Promise<void>;
     saveAllNotes: (notes: Note[]) => Promise<void>;
+    backupNotes: () => Promise<boolean>;
+    importNotes: () => Promise<boolean>;
 }
 
 interface Window {
@@ -25,6 +27,8 @@ interface Window {
             list: EventPayloadMapping['listNotes'];
             save: EventPayloadMapping['saveNote'];
             delete: EventPayloadMapping['deleteNote'];
+            backup: EventPayloadMapping['backupNotes'];
+            import: EventPayloadMapping['importNotes'];
         }
     }
 }

@@ -11,6 +11,8 @@ electron.contextBridge.exposeInMainWorld('electron', {
         saveAllNotes: (notes: Note[]) => electron.ipcRenderer.invoke("saveAllNotes", notes),
         list: () => electron.ipcRenderer.invoke("listNotes"),
         save: (note: Note) => electron.ipcRenderer.invoke("saveNote", note),
-        delete: (id: string) => electron.ipcRenderer.invoke("deleteNote", id)
+        delete: (id: string) => electron.ipcRenderer.invoke("deleteNote", id),
+        backup: () => electron.ipcRenderer.invoke("backupNotes"),
+        import: () => electron.ipcRenderer.invoke("importNotes")
     }
 } satisfies Window['electron']);
