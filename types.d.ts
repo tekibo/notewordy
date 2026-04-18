@@ -7,6 +7,11 @@ type Note = {
     _search?: string;
 };
 
+type AppSettings = {
+    wordsPerPage: number;
+    // Add future settings here
+};
+
 type EventPayloadMapping = {
     nuxtReady: () => Promise<void>;
     electronReady: () => Promise<boolean>;
@@ -14,11 +19,13 @@ type EventPayloadMapping = {
     saveNote: (note: Note) => Promise<void>;
     deleteNote: (id: string) => Promise<void>;
     saveAllNotes: (notes: Note[]) => Promise<void>;
-    backupNotes: () => Promise<boolean>;
+    backupNotes: (options?: { includeSettings?: boolean }) => Promise<boolean>;
     importNotes: () => Promise<boolean>;
     windowMinimize: () => Promise<void>;
     windowMaximize: () => Promise<void>;
     windowClose: () => Promise<void>;
+    getSettings: () => Promise<AppSettings>;
+    updateSettings: (settings: Partial<AppSettings>) => Promise<void>;
 }
 
 interface Window {
@@ -32,6 +39,10 @@ interface Window {
             delete: EventPayloadMapping['deleteNote'];
             backup: EventPayloadMapping['backupNotes'];
             import: EventPayloadMapping['importNotes'];
+        };
+        settings: {
+            get: EventPayloadMapping['getSettings'];
+            update: EventPayloadMapping['updateSettings'];
         };
         window: {
             minimize: EventPayloadMapping['windowMinimize'];

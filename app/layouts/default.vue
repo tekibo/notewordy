@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
 
 </script>
 
@@ -11,4 +10,5 @@ import { Icon } from '@iconify/vue';
             <slot />
         </SidebarInset>
     </SidebarProvider>
+    <AppScrollToTop />
 </template>

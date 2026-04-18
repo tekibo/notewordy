@@ -1,5 +1,6 @@
 import { app, BrowserWindow } from "electron";
 import { listNotes, saveNote, deleteNote, saveAllNotes, backupNotes, importNotes } from "./notes.js";
+import { getSettings, saveSettings } from "./settings.js";
 import { ipcHandle } from "../util.js";
 
 export function setupIpcHandlers() {
@@ -23,12 +24,20 @@ export function setupIpcHandlers() {
         saveAllNotes(notes);
     });
 
-    ipcHandle("backupNotes", async () => {
-        return backupNotes();
+    ipcHandle("backupNotes", async (_, options?: { includeSettings?: boolean }) => {
+        return backupNotes(options);
     });
 
     ipcHandle("importNotes", async () => {
         return importNotes();
+    });
+
+    ipcHandle("getSettings", async () => {
+        return getSettings();
+    });
+
+    ipcHandle("updateSettings", async (_, settings: Partial<AppSettings>) => {
+        saveSettings(settings);
     });
 
     ipcHandle("windowMinimize", async () => {

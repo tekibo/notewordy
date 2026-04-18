@@ -30,7 +30,7 @@ const close = () => window.electron.window.close();
             <button @click="close"
                 class="hover:bg-destructive/80 hover:text-destructive-foreground rounded-full p-1.5 transition-colors flex items-center justify-center group"
                 aria-label="Close">
-                <Icon icon="material-symbols-light:close" class="w-4 h-4" />
+                <Icon icon="material-symbols-light:close" class="w-4 h-4 group-hover:text-white" />
             </button>
         </div>
     </div>

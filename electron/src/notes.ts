@@ -1,6 +1,7 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, unlinkSync, writeFileSync } from "fs";
 import { app, dialog } from "electron";
 import path from "path";
+import { getSettings, saveSettings } from "./settings.js";
 
 function getNotesDir() {
     const noteDir = path.join(app.getPath('userData'), 'notewordy', 'notes');
@@ -36,7 +37,7 @@ function deleteNote(id: string) {
     unlinkSync(getNoteFile(id));
 }
     
-async function backupNotes() {
+async function backupNotes(options?: { includeSettings?: boolean }) {
     const notes = listNotes();
     const { filePath, canceled } = await dialog.showSaveDialog({
         title: 'Backup Notes',
@@ -47,7 +48,12 @@ async function backupNotes() {
     if (canceled || !filePath) return false;
 
     try {
-        writeFileSync(filePath, JSON.stringify({ version: '1.0', notes }, null, 2));
+        const backupData: any = { version: '1.1', notes };
+        if (options?.includeSettings) {
+            backupData.settings = getSettings();
+        }
+
+        writeFileSync(filePath, JSON.stringify(backupData, null, 2));
         return true;
     } catch (error) {
         console.error('Failed to backup notes:', error);
@@ -81,6 +87,12 @@ async function importNotes() {
         currentNotes.forEach(f => unlinkSync(path.join(getNotesDir(), f)));
 
         notes.forEach(note => saveNote(note));
+
+        // Restore settings if present
+        if (data.settings) {
+            saveSettings(data.settings);
+        }
+
         return true;
     } catch (error) {
         console.error('Failed to import notes:', error);

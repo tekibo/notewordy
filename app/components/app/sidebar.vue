@@ -40,9 +40,8 @@ watch(backendReady, (ready) => {
             </SidebarGroup>
         </SidebarContent>
         <SidebarFooter>
-            <div class="w-full flex items-center justify-between">
+            <div class="w-full flex items-center justify-end">
                 <AppSettings />
-                <ModeToggle />
             </div>
         </SidebarFooter>
     </Sidebar>

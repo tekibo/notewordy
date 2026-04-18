@@ -6,14 +6,21 @@ const { refreshNotes } = useNotes();
 
 const open = shallowRef(false);
 const confirmImportOpen = shallowRef(false);
+const backupOptionsOpen = shallowRef(false);
+const includeSettings = ref(true);
 
-const onSave = () => {
-    setWordsPerPage(wordsPerPage.value);
-    open.value = false;
-}
+watch(wordsPerPage, (val) => {
+    setWordsPerPage(val)
+})
 
 const handleBackup = async () => {
-    await window.electron.notes.backup();
+    const success = await window.electron.notes.backup({
+        includeSettings: includeSettings.value
+    });
+    if (success) {
+        backupOptionsOpen.value = false;
+        open.value = false;
+    }
 }
 
 const handleImport = async () => {
@@ -33,7 +40,6 @@ const handleImport = async () => {
             <DialogTrigger as-child>
                 <Button variant="outline">
                     <Icon icon="lucide:settings" />
-                    Settings
                 </Button>
             </DialogTrigger>
             <DialogContent class="sm:max-w-[425px]">
@@ -59,7 +65,7 @@ const handleImport = async () => {
                             </p>
                         </div>
                         <div class="flex gap-2">
-                            <Button variant="outline" class="flex-1" @click="handleBackup">
+                            <Button variant="outline" class="flex-1" @click="backupOptionsOpen = true">
                                 <Icon icon="lucide:download" class="mr-2 h-4 w-4" />
                                 Backup
                             </Button>
@@ -69,13 +75,43 @@ const handleImport = async () => {
                             </Button>
                         </div>
                     </div>
+
+                    <Separator />
+
+                    <div class="flex gap-2 items-center justify-between w-full">
+                        <h4 class="text-sm font-medium leading-none">App theme</h4>
+                        <ModeToggle />
+                    </div>
+
+                </div>
+
+            </DialogContent>
+        </Dialog>
+
+        <!-- Backup Options Dialog -->
+        <Dialog v-model:open="backupOptionsOpen">
+            <DialogContent class="sm:max-w-[400px]">
+                <DialogHeader>
+                    <DialogTitle>Backup Options</DialogTitle>
+                    <DialogDescription>
+                        Customize what you want to include in your backup file.
+                    </DialogDescription>
+                </DialogHeader>
+                <div class="py-4 space-y-4">
+                    <div class="flex items-center justify-between space-x-2">
+                        <div class="flex flex-col space-y-1">
+                            <Label for="include-settings">Include configurations</Label>
+                            <p class="text-xs text-muted-foreground">Include your words per page and theme preferences.</p>
+                        </div>
+                        <Switch id="include-settings" v-model:checked="includeSettings" />
+                    </div>
                 </div>
                 <DialogFooter>
-                    <DialogClose as-child>
-                        <Button variant="outline">Cancel</Button>
-                    </DialogClose>
-                    <Button @click="onSave">
-                        Save changes
+                    <Button variant="outline" @click="backupOptionsOpen = false">
+                        Cancel
+                    </Button>
+                    <Button @click="handleBackup">
+                        Create Backup
                     </Button>
                 </DialogFooter>
             </DialogContent>
@@ -87,7 +123,7 @@ const handleImport = async () => {
                 <DialogHeader>
                     <DialogTitle>Are you absolutely sure?</DialogTitle>
                     <DialogDescription>
-                        This will permanentely overwrite all your current notes with the data from the backup file. This
+                        This will permanentely overwrite all your current notes (and configurations if present in the backup) with the data from the backup file. This
                         action cannot be undone.
                     </DialogDescription>
                 </DialogHeader>
