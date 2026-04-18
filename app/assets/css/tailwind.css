@@ -114,7 +114,16 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.drag {
+  -webkit-app-region: drag
+}
+
+.no-drag {
+  -webkit-app-region: no-drag
 }

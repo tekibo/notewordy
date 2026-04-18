@@ -13,8 +13,8 @@ app.on('ready', () => {
     const mainWindow = new BrowserWindow({
         show: false,
         icon: getIconPath(),
-        titleBarStyle: 'hidden',
-        titleBarOverlay: true,
+        titleBarStyle: "hidden",
+        // titleBarOverlay: true,
         webPreferences: {
             preload: getPreloadPath()
         },

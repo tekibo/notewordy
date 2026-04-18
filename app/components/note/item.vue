@@ -1,11 +1,13 @@
 <script setup lang="ts">
+import { Icon } from '@iconify/vue';
+
 const { notes, hasNotes } = useNotes();
 const route = useRoute();
 const activeNote = (id: string) => route.params.id === id;
 </script>
 
 <template>
-    <SidebarMenuItem v-if="hasNotes" v-for="(note, i) in notes" :key="i" @click="navigateTo(`/note/${note.id}`)">
+    <SidebarMenuItem v-if="hasNotes" v-for="(note, i) in notes" :key="note.id" @click="navigateTo(`/note/${note.id}`)">
         <NoteActions :note-id="note.id">
             <SidebarMenuButton as-child :is-active="activeNote(note.id)">
                 <div class="flex justify-start items-center group/note">

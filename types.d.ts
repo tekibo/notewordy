@@ -16,6 +16,9 @@ type EventPayloadMapping = {
     saveAllNotes: (notes: Note[]) => Promise<void>;
     backupNotes: () => Promise<boolean>;
     importNotes: () => Promise<boolean>;
+    windowMinimize: () => Promise<void>;
+    windowMaximize: () => Promise<void>;
+    windowClose: () => Promise<void>;
 }
 
 interface Window {
@@ -29,6 +32,11 @@ interface Window {
             delete: EventPayloadMapping['deleteNote'];
             backup: EventPayloadMapping['backupNotes'];
             import: EventPayloadMapping['importNotes'];
-        }
+        };
+        window: {
+            minimize: EventPayloadMapping['windowMinimize'];
+            maximize: EventPayloadMapping['windowMaximize'];
+            close: EventPayloadMapping['windowClose'];
+        };
     }
 }

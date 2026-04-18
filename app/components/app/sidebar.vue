@@ -14,7 +14,7 @@ watch(backendReady, (ready) => {
 
 <template>
     <Sidebar variant="floating">
-        <SidebarHeader>
+        <SidebarHeader class="drag">
             <div class="flex w-full justify-between items-center">
                 <NuxtLink to="/" class="font-bold text-md text-base flex items-center gap-1">
                     <img src="assets/logo.png" class="size-8">

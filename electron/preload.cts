@@ -14,5 +14,10 @@ electron.contextBridge.exposeInMainWorld('electron', {
         delete: (id: string) => electron.ipcRenderer.invoke("deleteNote", id),
         backup: () => electron.ipcRenderer.invoke("backupNotes"),
         import: () => electron.ipcRenderer.invoke("importNotes")
+    },
+    window: {
+        minimize: () => electron.ipcRenderer.invoke("windowMinimize"),
+        maximize: () => electron.ipcRenderer.invoke("windowMaximize"),
+        close: () => electron.ipcRenderer.invoke("windowClose")
     }
 } satisfies Window['electron']);

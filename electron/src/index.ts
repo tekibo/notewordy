@@ -1,4 +1,4 @@
-import { app } from "electron";
+import { app, BrowserWindow } from "electron";
 import { listNotes, saveNote, deleteNote, saveAllNotes, backupNotes, importNotes } from "./notes.js";
 import { ipcHandle } from "../util.js";
 
@@ -29,5 +29,26 @@ export function setupIpcHandlers() {
 
     ipcHandle("importNotes", async () => {
         return importNotes();
+    });
+
+    ipcHandle("windowMinimize", async () => {
+        const win = BrowserWindow.getFocusedWindow();
+        if (win) win.minimize();
+    });
+
+    ipcHandle("windowMaximize", async () => {
+        const win = BrowserWindow.getFocusedWindow();
+        if (win) {
+            if (win.isMaximized()) {
+                win.restore();
+            } else {
+                win.maximize();
+            }
+        }
+    });
+
+    ipcHandle("windowClose", async () => {
+        const win = BrowserWindow.getFocusedWindow();
+        if (win) win.close();
     });
 }
