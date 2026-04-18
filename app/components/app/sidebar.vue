@@ -13,7 +13,7 @@ watch(backendReady, (ready) => {
 </script>
 
 <template>
-    <Sidebar>
+    <Sidebar variant="floating">
         <SidebarHeader>
             <div class="flex w-full justify-between items-center">
                 <NuxtLink to="/" class="font-bold text-md text-base flex items-center gap-1">
@@ -21,8 +21,6 @@ watch(backendReady, (ready) => {
                     NoteWordy
                 </NuxtLink>
             </div>
-        </SidebarHeader>
-        <SidebarContent>
             <div class="p-2 flex flex-col gap-2 w-full">
                 <Input v-model="rawQuery" placeholder="Search" @input="searchNotes(rawQuery)" />
                 <Button class="w-full" @click="addNote">
@@ -30,6 +28,12 @@ watch(backendReady, (ready) => {
                     <Icon icon="lucide:plus" />
                 </Button>
             </div>
+        </SidebarHeader>
+        <SidebarContent class="
+        [&::-webkit-scrollbar]:w-2
+        [&::-webkit-scrollbar-track]:bg-sidebar-border
+        [&::-webkit-scrollbar-thumb]:bg-sidebar-ring/80
+        ">
             <SidebarGroup>
                 <SidebarGroupLabel>Notes</SidebarGroupLabel>
                 <SidebarGroupContent>

@@ -8,8 +8,9 @@ const activeNote = (id: string) => route.params.id === id;
     <SidebarMenuItem v-if="hasNotes" v-for="(note, i) in notes" :key="i" @click="navigateTo(`/note/${note.id}`)">
         <NoteActions :note-id="note.id">
             <SidebarMenuButton as-child :is-active="activeNote(note.id)">
-                <div class="flex justify-between items-center group/note">
-                    {{ note.title }}
+                <div class="flex justify-start items-center group/note">
+                    <span class="w-4">{{ i + 1 }}</span>
+                    <p class="flex-1 min-w-0 truncate">{{ note.title }}</p>
                 </div>
             </SidebarMenuButton>
         </NoteActions>

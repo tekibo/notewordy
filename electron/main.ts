@@ -1,6 +1,6 @@
 import { app, BrowserWindow, Menu } from 'electron';
 import { isDev } from './util.js';
-import { getIconPath, getPreloadPath, getRelativePath } from './path-resolver.js';
+import { getIconPath, getPreloadPath, getRelativePath, getSafePath } from './path-resolver.js';
 import { createSplash } from './splash/index.js';
 import { setupIpcHandlers } from './src/index.js';
 
@@ -13,13 +13,13 @@ app.on('ready', () => {
     const mainWindow = new BrowserWindow({
         show: false,
         icon: getIconPath(),
-        skipTaskbar: true,
-
-        //skipTaskbar: isDev() ? false : true,
+        titleBarStyle: 'hidden',
+        titleBarOverlay: true,
         webPreferences: {
             preload: getPreloadPath()
         },
     });
+
 
     if (isDev()) {
         mainWindow.loadURL('http://localhost:3000');

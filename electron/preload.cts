@@ -1,4 +1,8 @@
 const electron = require('electron');
+//const { createTitlebarOnDOMContentLoaded } = require('custom-electron-titlebar');
+
+// Initialize the custom titlebar
+// createTitlebarOnDOMContentLoaded();
 
 electron.contextBridge.exposeInMainWorld('electron', {
     nuxtReady: () => electron.ipcRenderer.send("nuxtReady"),
