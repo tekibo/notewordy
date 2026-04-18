@@ -30,7 +30,7 @@ watchDebounced(content, (newContent) => {
 <template>
     <AppHeader>
         <template #left>
-            <Input v-model="title" class="flex-1 bg-card/80 dark:bg-card/60 backdrop-blur-lg shadow-2xl"
+            <Input v-model="title" class="flex-1 bg-card/80 dark:bg-card/60 backdrop-blur-lg shadow-2xl font-as text-lg"
                 placeholder="Title" />
         </template>
         <template #right>
@@ -44,6 +44,8 @@ watchDebounced(content, (newContent) => {
             resize-none 
             border-none 
             leading-loose
+            font-as
+            text-lg
             focus-visible:border-none 
             focus-visible:ring-transparent" placeholder="Write something..." />
     </div>

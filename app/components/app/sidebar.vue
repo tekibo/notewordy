@@ -20,6 +20,7 @@ watch(backendReady, (ready) => {
                     <img src="assets/logo.png" class="size-6">
                     NoteWordy
                 </NuxtLink>
+
             </div>
             <div class="p-2 flex flex-col gap-2 w-full">
                 <Input v-model="rawQuery" placeholder="Search" @input="searchNotes(rawQuery)" />

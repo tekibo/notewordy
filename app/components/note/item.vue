@@ -10,7 +10,7 @@ const activeNote = (id: string) => route.params.id === id;
             <SidebarMenuButton as-child :is-active="activeNote(note.id)">
                 <div class="cursor-default flex justify-start items-center group/note">
                     <span class="w-4">{{ i + 1 }}</span>
-                    <p class="flex-1 min-w-0 truncate">{{ note.title }}</p>
+                    <p class="flex-1 min-w-0 truncate font-as">{{ note.title }}</p>
                 </div>
             </SidebarMenuButton>
         </NoteActions>
