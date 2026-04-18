@@ -16,8 +16,8 @@ watch(backendReady, (ready) => {
     <Sidebar variant="floating">
         <SidebarHeader class="drag">
             <div class="flex w-full justify-between items-center">
-                <NuxtLink to="/" class="font-bold text-md text-base flex items-center gap-1">
-                    <img src="assets/logo.png" class="size-8">
+                <NuxtLink to="/" class="font-bold text-xs flex items-center gap-1">
+                    <img src="assets/logo.png" class="size-6">
                     NoteWordy
                 </NuxtLink>
             </div>
@@ -29,11 +29,7 @@ watch(backendReady, (ready) => {
                 </Button>
             </div>
         </SidebarHeader>
-        <SidebarContent class="
-        [&::-webkit-scrollbar]:w-2
-        [&::-webkit-scrollbar-track]:bg-sidebar-border
-        [&::-webkit-scrollbar-thumb]:bg-sidebar-ring/80
-        ">
+        <SidebarContent>
             <SidebarGroup>
                 <SidebarGroupLabel>Notes</SidebarGroupLabel>
                 <SidebarGroupContent>

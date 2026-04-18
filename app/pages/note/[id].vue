@@ -30,7 +30,8 @@ watchDebounced(content, (newContent) => {
 <template>
     <AppHeader>
         <template #left>
-            <Input v-model="title" class="flex-1 bg-card/80 dark:bg-card/80 backdrop-blur-lg" placeholder="Title" />
+            <Input v-model="title" class="flex-1 bg-card/80 dark:bg-card/60 backdrop-blur-lg shadow-2xl"
+                placeholder="Title" />
         </template>
         <template #right>
             <Count :count="wordCount" title="Words" />

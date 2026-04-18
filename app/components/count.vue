@@ -7,7 +7,7 @@ defineProps<{
 </script>
 
 <template>
-    <div class="flex items-center rounded-md bg-card/80 backdrop-blur-lg ring-muted ring-1">
+    <div class="cursor-default flex items-center rounded-md bg-card/70 backdrop-blur-lg shadow-2xl ring-muted ring-1">
         <div class="p-2 flex items-center justify-center flex-1">
             <span class="text-sm text-muted-foreground">{{ title }}</span>
         </div>
