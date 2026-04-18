@@ -40,12 +40,12 @@ watchDebounced(content, (newContent) => {
     </AppHeader>
     <div class="flex h-full mt-7 w-full p-2">
         <Textarea v-model="content" class="
+        p-4
             w-full 
             resize-none 
             border-none 
-            leading-loose
             font-as
-            text-lg
+            leading-normal!
             focus-visible:border-none 
             focus-visible:ring-transparent" placeholder="Write something..." />
     </div>

@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { useSidebar } from '@/components/ui/sidebar';
 import { Icon } from '@iconify/vue';
 
+const { state } = useSidebar();
 const { rawQuery, searchNotes, addNote, backendReady, refreshNotes } = useNotes();
 
 watch(backendReady, (ready) => {
@@ -15,12 +17,12 @@ watch(backendReady, (ready) => {
 <template>
     <Sidebar variant="floating">
         <SidebarHeader class="drag">
-            <div class="flex w-full justify-between items-center">
-                <NuxtLink to="/" class="font-bold text-xs flex items-center gap-1">
+            <div class="flex w-full justify-between items-center px-2 py-1">
+                <NuxtLink to="/" class="font-bold text-xs flex items-center gap-1 no-drag">
                     <img src="assets/logo.png" class="size-6">
                     NoteWordy
                 </NuxtLink>
-
+                <SidebarTrigger class="no-drag" />
             </div>
             <div class="p-2 flex flex-col gap-2 w-full">
                 <Input v-model="rawQuery" placeholder="Search" @input="searchNotes(rawQuery)" />

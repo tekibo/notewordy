@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import { useSidebar } from '@/components/ui/sidebar';
 import { Icon } from '@iconify/vue';
+
+const { state } = useSidebar();
 
 const minimize = () => window.electron.window.minimize();
 const maximize = () => window.electron.window.maximize();
@@ -7,7 +10,9 @@ const close = () => window.electron.window.close();
 </script>
 
 <template>
-    <div class="sticky top-0 flex w-full p-2 justify-end z-200 drag">
+    <div class="sticky top-0 flex w-full p-2 justify-between items-center z-200 drag">
+        <SidebarTrigger v-if="state === 'collapsed'" class="no-drag" />
+        <div v-else /> <!-- Spacer when expanded to keep controls right -->
         <div class="
                     no-drag 
                     rounded-full 

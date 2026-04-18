@@ -7,7 +7,6 @@
                 ">
         <div class="px-4 flex flex-col md:flex-row items-start md:items-center gap-2 w-full">
             <div class="flex items-center gap-2 w-full">
-                <SidebarTrigger class="-ml-1 " />
                 <slot name="left" />
             </div>
             <div class="flex items-center gap-2">
