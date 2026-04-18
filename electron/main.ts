@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, Menu } from 'electron';
 import { isDev } from './util.js';
 import { getIconPath, getPreloadPath, getRelativePath } from './path-resolver.js';
 import { createSplash } from './splash/index.js';
@@ -8,10 +8,14 @@ app.on('ready', () => {
 
     setupIpcHandlers();
 
+    Menu.setApplicationMenu(null)
+
     const mainWindow = new BrowserWindow({
         show: false,
         icon: getIconPath(),
-        skipTaskbar: isDev() ? false : true,
+        skipTaskbar: true,
+
+        //skipTaskbar: isDev() ? false : true,
         webPreferences: {
             preload: getPreloadPath()
         },

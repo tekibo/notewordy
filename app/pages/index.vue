@@ -1,7 +1,4 @@
 <script setup lang="ts">
-
-
-
 </script>
 
 <template>
@@ -14,5 +11,4 @@
             </CardHeader>
         </Card>
     </div>
-
 </template>

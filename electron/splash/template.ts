@@ -110,7 +110,6 @@ export function buildSplashHtml(config: Partial<SplashConfig> = {}): string {
             position: relative;
             overflow: hidden;
             transition: all 0.3s ease;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
             ${stylesByTemplate[template] || stylesByTemplate.gradient}
         }
 
