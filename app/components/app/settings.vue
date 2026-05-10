@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 
-const { wordsPerPage, setWordsPerPage, assameseMode, setAssameseMode } = useSettings();
+const { wordsPerPage, setWordsPerPage, assameseMode, setAssameseMode, fontSize, setFontSize } = useSettings();
 const { refreshNotes } = useNotes();
 
 const open = shallowRef(false);
@@ -60,6 +60,17 @@ const handleImport = async () => {
                                 type.</p>
                         </div>
                         <Switch id="assameseMode" :model-value="assameseMode" @update:model-value="setAssameseMode" />
+                    </div>
+
+                    <div class="flex flex-col gap-3">
+                        <div class="flex justify-between items-center">
+                            <Label for="fontSize">Font Size</Label>
+                            <span class="text-xs font-mono bg-muted px-1.5 py-0.5 rounded">{{ fontSize }}px</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <Slider id="fontSize" :model-value="[fontSize]" :max="APP_CONSTANTS.MAX_FONT_SIZE" :min="APP_CONSTANTS.MIN_FONT_SIZE" :step="1"
+                                @update:model-value="(v) => { if (v && v.length > 0 && typeof v[0] === 'number') setFontSize(v[0]); }" />
+                        </div>
                     </div>
 
                     <Separator />

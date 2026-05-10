@@ -4,7 +4,8 @@ import path from "path";
 
 const DEFAULT_SETTINGS: AppSettings = {
     wordsPerPage: 300,
-    assameseMode: false
+    assameseMode: false,
+    fontSize: 16
 };
 
 function getSettingsFile() {

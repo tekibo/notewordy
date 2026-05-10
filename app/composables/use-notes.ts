@@ -1,4 +1,3 @@
-import { useDebounceFn } from '@vueuse/core';
 import { formatForIpc, normalizeNote, sortNotes } from '~/lib/note-actions';
 
 export function useNotes() {
@@ -23,10 +22,11 @@ export function useNotes() {
         sortNotes(notes.value);
     };
 
+    const { assameseMode } = useAssamese();
+
     const addNote = async () => {
         if (!isReady.value) return;
 
-        const { assameseMode } = useAssamese();
         const defaultTitle = assameseMode.value ? APP_CONSTANTS.DEFAULT_TITLE_AS : APP_CONSTANTS.DEFAULT_TITLE_EN;
 
         const now = new Date();

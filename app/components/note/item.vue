@@ -3,6 +3,7 @@ const { notes, hasNotes } = useNotes();
 const route = useRoute();
 const activeNote = (id: string) => route.params.id === id;
 const { assameseMode } = useAssamese();
+const { fontSize } = useSettings();
 </script>
 
 <template>
@@ -11,7 +12,8 @@ const { assameseMode } = useAssamese();
             <SidebarMenuButton as-child :is-active="activeNote(note.id)">
                 <div class="cursor-default flex justify-start items-center group/note">
                     <span class="w-4">{{ i + 1 }}</span>
-                    <p class="flex-1 min-w-0 truncate" :class="{ 'font-as': assameseMode }">
+                    <p class="flex-1 min-w-0 truncate" :class="{ 'font-as': assameseMode }"
+                        :style="{ fontSize: `${Math.min(fontSize, APP_CONSTANTS.MAX_SIDEBAR_FONT_SIZE)}px` }">
                         {{ note.title || (assameseMode ? APP_CONSTANTS.DEFAULT_TITLE_AS : APP_CONSTANTS.DEFAULT_TITLE_EN) }}
                     </p>
                 </div>

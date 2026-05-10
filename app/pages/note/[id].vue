@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { APP_CONSTANTS } from '~/utils/constants';
 const route = useRoute();
 const id = computed(() => route.params.id as string);
 
@@ -18,7 +19,8 @@ watch(id, (newId) => {
 
 const { wordCount, pageCount } = useCount(content);
 
-const { assameseMode, handleAssameseInput } = useAssamese();
+const { fontSize, assameseMode } = useSettings();
+const { handleAssameseInput } = useAssamese();
 
 watchDebounced(title, (newTitle) => {
     updateNote({ id: id.value, title: newTitle });
@@ -40,7 +42,7 @@ watch(assameseMode, (enabled) => {
     <AppHeader>
         <template #left>
             <Input v-model="title" class="flex-1 bg-card/80 dark:bg-card/60 backdrop-blur-lg shadow-2xl text-lg"
-                :class="{ 'font-as': assameseMode }"
+                :class="{ 'font-as': assameseMode }" :style="{ fontSize: `${Math.min(fontSize, APP_CONSTANTS.MAX_TITLE_FONT_SIZE)}px` }"
                 :placeholder="assameseMode ? APP_CONSTANTS.PLACEHOLDER_TITLE_AS : APP_CONSTANTS.PLACEHOLDER_TITLE_EN"
                 @input="(e: Event) => handleAssameseInput(e, (v) => title = v)" />
         </template>
@@ -56,8 +58,10 @@ watch(assameseMode, (enabled) => {
             resize-none 
             border-none 
             leading-normal!
-            focus-visible:border-none 
-            focus-visible:ring-transparent" :class="{ 'font-as': assameseMode }"
+            dark:bg-background
+            bg-background
+            focus-visible:border-none
+            focus-visible:ring-transparent" :class="{ 'font-as': assameseMode }" :style="{ fontSize: `${fontSize}px` }"
             :placeholder="assameseMode ? APP_CONSTANTS.PLACEHOLDER_CONTENT_AS : APP_CONSTANTS.PLACEHOLDER_CONTENT_EN"
             @input="(e: Event) => handleAssameseInput(e, (v) => content = v)" />
     </div>

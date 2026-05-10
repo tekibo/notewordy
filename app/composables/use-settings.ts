@@ -1,14 +1,18 @@
+import { APP_CONSTANTS } from '../utils/constants';
+
 export function useSettings() {
     const wordsPerPage = useState<number>('wordsPerPage', () => 300);
     const assameseMode = useState<boolean>('assameseMode', () => false);
+    const fontSize = useState<number>('fontSize', () => APP_CONSTANTS.DEFAULT_FONT_SIZE);
     const loaded = useState<boolean>('settingsLoaded', () => false);
 
     const loadSettings = async () => {
         if (typeof window === 'undefined' || !window.electron) return;
         const settings = await window.electron.settings.get();
         if (settings) {
-            wordsPerPage.value = settings.wordsPerPage;
+            wordsPerPage.value = settings.wordsPerPage ?? 300;
             assameseMode.value = settings.assameseMode ?? false;
+            fontSize.value = settings.fontSize ?? APP_CONSTANTS.DEFAULT_FONT_SIZE;
             loaded.value = true;
         }
     }
@@ -29,6 +33,14 @@ export function useSettings() {
         }
     }
 
+    const setFontSize = async (value: number) => {
+        if (value < APP_CONSTANTS.MIN_FONT_SIZE || value > APP_CONSTANTS.MAX_FONT_SIZE) return;
+        fontSize.value = value;
+        if (typeof window !== 'undefined' && window.electron) {
+            await window.electron.settings.update({ fontSize: value });
+        }
+    }
+
     // Initial load
     if (process.client && !loaded.value) {
         loadSettings();
@@ -37,8 +49,10 @@ export function useSettings() {
     return {
         wordsPerPage,
         assameseMode,
+        fontSize,
         setWordsPerPage,
         setAssameseMode,
+        setFontSize,
         loadSettings
     }
 }
