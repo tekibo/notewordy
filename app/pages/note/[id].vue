@@ -18,6 +18,8 @@ watch(id, (newId) => {
 
 const { wordCount, pageCount } = useCount(content);
 
+const { assameseMode, handleAssameseInput } = useAssamese();
+
 watchDebounced(title, (newTitle) => {
     updateNote({ id: id.value, title: newTitle });
 }, { debounce: 500 })
@@ -25,13 +27,22 @@ watchDebounced(title, (newTitle) => {
 watchDebounced(content, (newContent) => {
     updateNote({ id: id.value, content: newContent });
 }, { debounce: 500 })
+watch(assameseMode, (enabled) => {
+    if (enabled && title.value === APP_CONSTANTS.DEFAULT_TITLE_EN) {
+        title.value = APP_CONSTANTS.DEFAULT_TITLE_AS;
+    } else if (!enabled && title.value === APP_CONSTANTS.DEFAULT_TITLE_AS) {
+        title.value = APP_CONSTANTS.DEFAULT_TITLE_EN;
+    }
+})
 </script>
 
 <template>
     <AppHeader>
         <template #left>
-            <Input v-model="title" class="flex-1 bg-card/80 dark:bg-card/60 backdrop-blur-lg shadow-2xl font-as text-lg"
-                placeholder="Title" />
+            <Input v-model="title" class="flex-1 bg-card/80 dark:bg-card/60 backdrop-blur-lg shadow-2xl text-lg"
+                :class="{ 'font-as': assameseMode }"
+                :placeholder="assameseMode ? APP_CONSTANTS.PLACEHOLDER_TITLE_AS : APP_CONSTANTS.PLACEHOLDER_TITLE_EN"
+                @input="(e: Event) => handleAssameseInput(e, (v) => title = v)" />
         </template>
         <template #right>
             <Count :count="wordCount" title="Words" />
@@ -40,13 +51,14 @@ watchDebounced(content, (newContent) => {
     </AppHeader>
     <div class="flex h-full mt-7 w-full p-2">
         <Textarea v-model="content" class="
-        p-4
+            p-4
             w-full 
             resize-none 
             border-none 
-            font-as
             leading-normal!
             focus-visible:border-none 
-            focus-visible:ring-transparent" placeholder="Write something..." />
+            focus-visible:ring-transparent" :class="{ 'font-as': assameseMode }"
+            :placeholder="assameseMode ? APP_CONSTANTS.PLACEHOLDER_CONTENT_AS : APP_CONSTANTS.PLACEHOLDER_CONTENT_EN"
+            @input="(e: Event) => handleAssameseInput(e, (v) => content = v)" />
     </div>
 </template>

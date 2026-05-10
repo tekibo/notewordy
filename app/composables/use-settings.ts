@@ -1,5 +1,6 @@
 export function useSettings() {
     const wordsPerPage = useState<number>('wordsPerPage', () => 300);
+    const assameseMode = useState<boolean>('assameseMode', () => false);
     const loaded = useState<boolean>('settingsLoaded', () => false);
 
     const loadSettings = async () => {
@@ -7,6 +8,7 @@ export function useSettings() {
         const settings = await window.electron.settings.get();
         if (settings) {
             wordsPerPage.value = settings.wordsPerPage;
+            assameseMode.value = settings.assameseMode ?? false;
             loaded.value = true;
         }
     }
@@ -19,6 +21,14 @@ export function useSettings() {
         }
     }
 
+    const setAssameseMode = async (value: boolean | unknown) => {
+        const boolValue = !!value;
+        assameseMode.value = boolValue;
+        if (typeof window !== 'undefined' && window.electron) {
+            await window.electron.settings.update({ assameseMode: boolValue });
+        }
+    }
+
     // Initial load
     if (process.client && !loaded.value) {
         loadSettings();
@@ -26,7 +36,9 @@ export function useSettings() {
 
     return {
         wordsPerPage,
+        assameseMode,
         setWordsPerPage,
+        setAssameseMode,
         loadSettings
     }
 }

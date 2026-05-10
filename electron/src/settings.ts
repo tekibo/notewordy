@@ -3,7 +3,8 @@ import { app } from "electron";
 import path from "path";
 
 const DEFAULT_SETTINGS: AppSettings = {
-    wordsPerPage: 300
+    wordsPerPage: 300,
+    assameseMode: false
 };
 
 function getSettingsFile() {

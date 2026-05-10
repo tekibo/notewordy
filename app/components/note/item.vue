@@ -2,6 +2,7 @@
 const { notes, hasNotes } = useNotes();
 const route = useRoute();
 const activeNote = (id: string) => route.params.id === id;
+const { assameseMode } = useAssamese();
 </script>
 
 <template>
@@ -10,7 +11,9 @@ const activeNote = (id: string) => route.params.id === id;
             <SidebarMenuButton as-child :is-active="activeNote(note.id)">
                 <div class="cursor-default flex justify-start items-center group/note">
                     <span class="w-4">{{ i + 1 }}</span>
-                    <p class="flex-1 min-w-0 truncate font-as">{{ note.title }}</p>
+                    <p class="flex-1 min-w-0 truncate" :class="{ 'font-as': assameseMode }">
+                        {{ note.title || (assameseMode ? APP_CONSTANTS.DEFAULT_TITLE_AS : APP_CONSTANTS.DEFAULT_TITLE_EN) }}
+                    </p>
                 </div>
             </SidebarMenuButton>
         </NoteActions>

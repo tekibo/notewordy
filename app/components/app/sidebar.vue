@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { useSidebar } from '@/components/ui/sidebar';
 import { Icon } from '@iconify/vue';
 
-const { state } = useSidebar();
 const { rawQuery, searchNotes, addNote, backendReady, refreshNotes } = useNotes();
+const { assameseMode, handleAssameseInput } = useAssamese();
 
 watch(backendReady, (ready) => {
     if (ready) {
@@ -24,8 +23,9 @@ watch(backendReady, (ready) => {
                 </NuxtLink>
                 <SidebarTrigger class="no-drag" />
             </div>
-            <div class="p-2 flex flex-col gap-2 w-full">
-                <Input v-model="rawQuery" placeholder="Search" @input="searchNotes(rawQuery)" />
+            <div class="p-2 flex flex-col gap-2 w-full no-drag">
+                <Input v-model="rawQuery" placeholder="Search" :class="{ 'font-as': assameseMode }"
+                    @input="(e: Event) => { handleAssameseInput(e, (v) => rawQuery = v); searchNotes(rawQuery); }" />
                 <Button class="w-full" @click="addNote">
                     <span class="text-sm">New Note</span>
                     <Icon icon="lucide:plus" />

@@ -9,7 +9,7 @@ type Note = {
 
 type AppSettings = {
     wordsPerPage: number;
-    // Add future settings here
+    assameseMode: boolean;
 };
 
 type EventPayloadMapping = {

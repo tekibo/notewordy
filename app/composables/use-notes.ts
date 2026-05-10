@@ -26,12 +26,15 @@ export function useNotes() {
     const addNote = async () => {
         if (!isReady.value) return;
 
+        const { assameseMode } = useAssamese();
+        const defaultTitle = assameseMode.value ? APP_CONSTANTS.DEFAULT_TITLE_AS : APP_CONSTANTS.DEFAULT_TITLE_EN;
+
         const now = new Date();
         const id = Date.now().toString();
 
         const newNote: Note = normalizeNote({
             id,
-            title: "Untitled",
+            title: defaultTitle,
             content: "",
             createdAt: now.toISOString(),
             updatedAt: now.toISOString()
