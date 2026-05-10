@@ -26,7 +26,7 @@ watch(backendReady, (ready) => {
             <div class="p-2 flex flex-col gap-2 w-full no-drag">
                 <Input v-model="rawQuery" placeholder="Search" :class="{ 'font-as': assameseMode }"
                     @input="(e: Event) => { handleAssameseInput(e, (v) => rawQuery = v); searchNotes(rawQuery); }" />
-                <Button class="w-full" @click="addNote">
+                <Button class="w-full" variant="secondary" @click="navigateTo('/')">
                     <span class="text-sm">New Note</span>
                     <Icon icon="lucide:plus" />
                 </Button>
@@ -42,10 +42,6 @@ watch(backendReady, (ready) => {
                 </SidebarGroupContent>
             </SidebarGroup>
         </SidebarContent>
-        <SidebarFooter>
-            <div class="w-full flex items-center justify-end">
-                <AppSettings />
-            </div>
-        </SidebarFooter>
+        <SidebarFooter />
     </Sidebar>
 </template>

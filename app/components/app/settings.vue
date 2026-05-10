@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 
-const { wordsPerPage, setWordsPerPage, assameseMode, setAssameseMode, fontSize, setFontSize } = useSettings();
+    const { wordsPerPage, setWordsPerPage, assameseMode, setAssameseMode, fontSize, setFontSize } = useSettings();
 const { refreshNotes } = useNotes();
 
 const open = shallowRef(false);
 const confirmImportOpen = shallowRef(false);
 const backupOptionsOpen = shallowRef(false);
+const keyboardLayoutOpen = shallowRef(false);
 const includeSettings = ref(true);
 
 
@@ -35,11 +36,11 @@ const handleImport = async () => {
     <div>
         <Dialog v-model:open="open">
             <DialogTrigger as-child>
-                <Button variant="outline">
-                    <Icon icon="lucide:settings" />
+                <Button variant="outline" class="rounded-full w-9 h-9 p-0 bg-card/50 backdrop-blur-xl border-border/40 hover:bg-muted transition-all">
+                    <Icon icon="lucide:settings" class="w-4 h-4 text-muted-foreground" />
                 </Button>
             </DialogTrigger>
-            <DialogContent class="sm:max-w-[425px]">
+            <DialogContent class="sm:max-w-[425px]" @open-auto-focus.prevent>
                 <DialogHeader>
                     <DialogTitle>Settings</DialogTitle>
                     <DialogDescription>
@@ -58,6 +59,9 @@ const handleImport = async () => {
                             <Label for="assameseMode">Assamese Mode</Label>
                             <p class="text-xs text-muted-foreground">Transliterate Latin to Assamese characters as you
                                 type.</p>
+                            <Button variant="link" size="sm" class="h-auto p-0 w-fit text-primary" @click="keyboardLayoutOpen = true">
+                                View Keyboard Layout
+                            </Button>
                         </div>
                         <Switch id="assameseMode" :model-value="assameseMode" @update:model-value="setAssameseMode" />
                     </div>
@@ -105,6 +109,9 @@ const handleImport = async () => {
 
             </DialogContent>
         </Dialog>
+
+        <!-- Keyboard Layout Modal -->
+        <AppKeyboardLayoutModal v-model:open="keyboardLayoutOpen" />
 
         <!-- Backup Options Dialog -->
         <Dialog v-model:open="backupOptionsOpen">
