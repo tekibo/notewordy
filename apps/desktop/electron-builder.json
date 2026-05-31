@@ -1,6 +1,6 @@
 {
     "appId": "com.tekibo.notewordy",
-    "icon": "./desktopIcon.png",
+    "icon": "./icon256.png",
     "files": [
         "dist-electron"
     ],
