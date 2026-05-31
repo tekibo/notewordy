@@ -1,23 +1,17 @@
 {
   "name": "@notewordy/transliterate_as",
   "version": "1.0.0",
-  "description": "Assamese text transliteration",
+  "description": "Assamese text transliteration (Latin to Assamese script)",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "build:bundle": "ncc build src/index.ts -o dist -m",
     "dev": "tsx src/index.ts",
-    "extract": "node gen.mjs",
     "typecheck": "tsc --noEmit"
   },
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^25.9.1",
-    "@vercel/ncc": "^0.38.4",
-    "tsx": "^4.22.3",
     "typescript": "^6.0.3"
   },
   "keywords": [
@@ -25,7 +19,7 @@
     "transliterate",
     "font"
   ],
-  "author": "TKEIBO",
+  "author": "TEKIBO",
   "files": [
     "dist"
   ]

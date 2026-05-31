@@ -1,8 +1,3 @@
-/**
- * Assamese transliteration logic
- * Copyright tekibo.in
- */
-
 type Replacement = [RegExp, string];
 
 const replacements: Replacement[] = [
@@ -22,7 +17,6 @@ const replacements: Replacement[] = [
     [/ওউ/g, "ঔ"],
     [/O/g, "ঔ"],
 
-    // suppression du virama 
     [/িই/g, "ী"],
     [/ুউ/g, "ূ"],
     [/্ও/g, "\u200b"],
@@ -30,7 +24,7 @@ const replacements: Replacement[] = [
     [/\u200bই/g, "ৈ"],
     [/\u200bউ/g, "ৌ"],
     [/\u200bও/g, "ো"],
-    [/\u200bঊ/g, "ৗ"], //aU 
+    [/\u200bঊ/g, "ৗ"],
 
     [/্আ/g, "া"],
     [/্ই/g, "ি"],
@@ -43,10 +37,8 @@ const replacements: Replacement[] = [
     [/্ঌ/g, "ৢ"],
     [/্ৡ/g, " ৣ"],
     [/্এ/g, "ে"],
-    //[/্ও/g, "ো"],
     [/্ /g, " "],
 
-    //cons
     [/n/g, "ন্"],
     [/k/g, "ক্"],
     [/g/g, "গ্"],
@@ -56,29 +48,27 @@ const replacements: Replacement[] = [
     [/[DḍḌ]/g, "ড্"],
     [/[NṇṆ]/g, "ণ্"],
     [/t/g, "ত্"],
-    [/ত্-/g, "ৎ"], // t final
+    [/ত্-/g, "ৎ"],
     [/d/g, "দ্"],
     [/p/g, "প্"],
     [/b/g, "ব্"],
     [/m/g, "ম্"],
-    [/[yY]/g, "য়্"], // un seul y
+    [/[yY]/g, "য়্"],
     [/R/g, "ড়্"],
-    [/z/g, "য্"], // z replace y
-    [/r/g, "ৰ্"], // autre 
-    [/[wv]/g, "ৱ্"], // ajout 
+    [/z/g, "য্"],
+    [/r/g, "ৰ্"],
+    [/[wv]/g, "ৱ্"],
     [/l/g, "ল্"],
     [/h/g, "হ্"],
     [/[SXṣṢ]/g, "ষ্"],
     [/[sx]/g, "স্"],
-    // cas particuliers 
-    [/K/g, "ক্ষ্"], // ajout k+S 
+    [/K/g, "ক্ষ্"],
     [/G/g, "ঙ্"],
     [/J/g, "ঞ্"],
     [/ñ/g, "ঞ্"],
     [/ন্গ্/g, "ঙ্"],
     [/ন্জ্/g, "ঞ্"],
 
-    // aspirées
     [/ক্হ্/g, "খ্"],
     [/গ্হ্/g, "ঘ্"],
     [/চ্হ্/g, "ছ্"],
@@ -91,12 +81,9 @@ const replacements: Replacement[] = [
     [/ব্হ্/g, "ভ্"],
     [/ড়্হ্/g, "ঢ়্"],
 
-
-    // cas du s barre
     [/স্হ্/g, "শ্"],
-    [/[çśŚ]/g, "শ্"], // pas de z
+    [/[çśŚ]/g, "শ্"],
 
-    // cas du ri li 
     [/্-ৰ/g, "ৃ"],
     [/-ৰ/g, "ঋ"],
     [/ঋই/g, "ৠ"],
@@ -107,12 +94,10 @@ const replacements: Replacement[] = [
     [/ঌই/g, "ৡ"],
     [/ৢই/g, "ৣ"],
 
-    // ponctuation devanagari
     [/\|/g, "।"],
     [/\//g, "।"],
     [/।।/g, "॥"],
 
-    //suppression du zero
     [/\u200bক/g, "ক"],
     [/\u200bখ/g, "খ"],
     [/\u200bগ/g, "গ"],
@@ -149,21 +134,15 @@ const replacements: Replacement[] = [
     [/\u200b\ং/g, "ং"],
     [/\u200b\ঃ/g, "ঃ"],
 
-    // anusvara
     [/[Mṁ]/g, "ং"],
     [/্ং/g, "ং"],
-    // candrabindu 
     [/ংং/g, "ঁ"],
-    // visarga
     [/[Hḥ]/g, "ঃ"],
     [/্ঃ/g, "ঃ"],
 
-    // alternative : [/:/g, "ः"],
-    // avagraha
     [/\'/g, "ঽ"],
     [/’/g, "ঽ"],
 
-    //half conso
     [/_/g, "\u200d"],
     [/\u200d\u200d/g, "\u200c"],
 
@@ -179,11 +158,6 @@ const replacements: Replacement[] = [
     [/9/g, "৯"],
 ];
 
-/**
- * Transliterates Latin text to Assamese characters based on the defined rules.
- * @param text The input text in Latin script.
- * @returns The transliterated Assamese text.
- */
 export function transliterateAssamese(text: string): string {
     let result = text;
     for (const [regex, replacement] of replacements) {

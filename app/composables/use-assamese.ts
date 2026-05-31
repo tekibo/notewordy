@@ -1,4 +1,4 @@
-import { transliterateAssamese } from '../utils/assamese';
+import { transliterateAssamese } from '@notewordy/transliterate_as';
 
 export function useAssamese() {
     const { assameseMode } = useSettings();

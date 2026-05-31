@@ -22,6 +22,8 @@
     "dev": "concurrently -k -s first -n \"NUXT,ELECTRON\" -c \"blue,green\" \"pnpm dev:nuxt\" \"wait-on http://localhost:3000 && pnpm dev:electron\""
   },
   "dependencies": {
+    "@notewordy/transliterate_as": "workspace:*",
+    "@notewordy/convert_as": "workspace:*",
     "@number-flow/vue": "^0.5.0",
     "@nuxt/image": "2.0.0",
     "@vueuse/core": "^14.2.1",

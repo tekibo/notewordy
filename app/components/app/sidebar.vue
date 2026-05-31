@@ -42,6 +42,13 @@ watch(backendReady, (ready) => {
                 </SidebarGroupContent>
             </SidebarGroup>
         </SidebarContent>
-        <SidebarFooter />
+        <SidebarFooter>
+            <div class="p-2">
+                <Button variant="ghost" class="w-full justify-start gap-2 text-xs text-muted-foreground" @click="navigateTo('/converter')">
+                    <Icon icon="lucide:repeat-2" class="w-3.5 h-3.5" />
+                    Font Converter
+                </Button>
+            </div>
+        </SidebarFooter>
     </Sidebar>
 </template>

@@ -49,6 +49,17 @@ const timeOfDay = computed(() => {
                         <p class="text-[10px] text-muted-foreground/50 leading-tight">Assamese typing guide.</p>
                     </div>
                 </button>
+
+                <button @click="navigateTo('/converter')" 
+                    class="group flex items-center gap-4 p-5 rounded-2xl border border-border/40 bg-card/20 backdrop-blur-md hover:bg-primary/5 hover:border-primary/20 transition-all duration-500 text-left">
+                    <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0 group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500">
+                        <Icon icon="lucide:repeat-2" class="w-5 h-5" />
+                    </div>
+                    <div class="min-w-0">
+                        <h3 class="font-bold text-sm mb-0.5">Converter</h3>
+                        <p class="text-[10px] text-muted-foreground/50 leading-tight">Geetanjali ↔ Unicode.</p>
+                    </div>
+                </button>
             </div>
 
         </div>
