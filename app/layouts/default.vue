@@ -6,9 +6,9 @@
     <SidebarProvider>
         <AppSidebar />
         <SidebarInset>
-            <AppTitlebar />
-            <slot />
-        </SidebarInset>
+                    <AppTitlebar />
+                    <slot />
+                </SidebarInset>
     </SidebarProvider>
     <AppScrollToTop />
 </template>

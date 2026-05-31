@@ -14,7 +14,11 @@ app.on('ready', () => {
         show: false,
         icon: getIconPath(),
         titleBarStyle: "hidden",
-        // titleBarOverlay: true,
+        titleBarOverlay: {
+            color: '#00000000',
+            symbolColor: '#fafafa',
+            height: 42
+        },
         webPreferences: {
             preload: getPreloadPath()
         },

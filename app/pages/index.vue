@@ -14,12 +14,6 @@ const timeOfDay = computed(() => {
 
 <template>
     <div class="relative flex flex-1 flex-col items-center justify-center p-4 md:p-8 h-full overflow-hidden">
-        <!-- Ambient Background -->
-        <div class="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
-            <div class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] rounded-full bg-primary/5 blur-[100px] animate-pulse"></div>
-            <div class="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] rounded-full bg-primary/5 blur-[100px]"></div>
-        </div>
-
         <div class="max-w-2xl w-full flex flex-col items-center gap-8 md:gap-12 text-center relative py-4">
             <!-- Header Section -->
             <header class="space-y-3 md:space-y-4 animate-in fade-in slide-in-from-bottom-8 duration-1000 shrink-0">

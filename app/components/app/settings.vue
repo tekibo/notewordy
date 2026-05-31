@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 
-    const { wordsPerPage, setWordsPerPage, assameseMode, setAssameseMode, fontSize, setFontSize } = useSettings();
+const { wordsPerPage, setWordsPerPage, assameseMode, setAssameseMode, fontSize, setFontSize } = useSettings();
 const { refreshNotes } = useNotes();
 
 const open = shallowRef(false);
@@ -36,7 +36,7 @@ const handleImport = async () => {
     <div>
         <Dialog v-model:open="open">
             <DialogTrigger as-child>
-                <Button variant="outline" class="rounded-full w-9 h-9 p-0 bg-card/50 backdrop-blur-xl border-border/40 hover:bg-muted transition-all">
+                <Button variant="default" class="rounded-full size-7 bg-card border-none hover:bg-muted transition-all">
                     <Icon icon="lucide:settings" class="w-4 h-4 text-muted-foreground" />
                 </Button>
             </DialogTrigger>
