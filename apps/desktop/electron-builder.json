@@ -1,0 +1,26 @@
+{
+    "appId": "com.tekibo.notewordy",
+    "icon": "./desktopIcon.png",
+    "files": [
+        "dist-electron"
+    ],
+    "extraResources": [
+        {
+            "from": "../web/dist-nuxt/public",
+            "to": "dist-nuxt/public"
+        }
+    ],
+    "mac": {
+        "target": "dmg"
+    },
+    "linux": {
+        "target": "AppImage",
+        "category": "Utility"
+    },
+    "win": {
+        "target": [
+            "portable",
+            "msi"
+        ]
+    }
+}
