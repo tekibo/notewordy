@@ -5,28 +5,30 @@ const id = computed(() => route.params.id as string);
 
 const { getNote, updateNote } = useNotes();
 
-const title = shallowRef<string>("");
-const content = shallowRef<string>("");
+const { activeNoteId, activeNoteTitle: title, activeNoteContent: content } = useActiveNoteState();
 
 watch(id, (newId) => {
+    activeNoteId.value = newId;
     const note = getNote(newId);
     if (note) {
         title.value = note.title;
         content.value = note.content;
+    } else {
+        title.value = "";
+        content.value = "";
     }
 }, { immediate: true })
-
-
-const { wordCount, pageCount } = useCount(content);
 
 const { fontSize, assameseMode } = useSettings();
 const { handleAssameseInput } = useAssamese();
 
 watchDebounced(title, (newTitle) => {
+    if (!getNote(id.value)) return;
     updateNote({ id: id.value, title: newTitle });
 }, { debounce: 500 })
 
 watchDebounced(content, (newContent) => {
+    if (!getNote(id.value)) return;
     updateNote({ id: id.value, content: newContent });
 }, { debounce: 500 })
 watch(assameseMode, (enabled) => {
@@ -39,19 +41,8 @@ watch(assameseMode, (enabled) => {
 </script>
 
 <template>
-    <AppHeader>
-        <template #left>
-            <Input v-model="title" class="flex-1 bg-card/80 dark:bg-card/60 backdrop-blur-lg shadow-2xl text-lg"
-                :class="{ 'font-as': assameseMode }" :style="{ fontSize: `${Math.min(fontSize, APP_CONSTANTS.MAX_TITLE_FONT_SIZE)}px` }"
-                :placeholder="assameseMode ? APP_CONSTANTS.PLACEHOLDER_TITLE_AS : APP_CONSTANTS.PLACEHOLDER_TITLE_EN"
-                @input="(e: Event) => handleAssameseInput(e, (v) => title = v)" />
-        </template>
-        <template #right>
-            <Count :count="wordCount" title="Words" />
-            <Count :count="pageCount" title="Page" />
-        </template>
-    </AppHeader>
-    <div class="flex h-full mt-7 w-full p-2 min-h-0">
+    <div class="flex flex-1 min-h-0 w-full p-2">
+        <div class="fixed top-10 w-full flex h-8 z-999 bg-linear-to-b from-background to-background/20 pointer-events-none"/>
         <Textarea v-model="content" class="
             p-4
             pb-48
@@ -70,5 +61,5 @@ watch(assameseMode, (enabled) => {
             :placeholder="assameseMode ? APP_CONSTANTS.PLACEHOLDER_CONTENT_AS : APP_CONSTANTS.PLACEHOLDER_CONTENT_EN"
             @input="(e: Event) => handleAssameseInput(e, (v) => content = v)" />
         </div>
-        <div class="fixed bottom-0 w-full flex h-12 z-999 bg-linear-to-t from-background to-background/20 pointer-events-none"></div>
+        <div class="fixed bottom-0 w-full flex h-12 z-999 bg-linear-to-t from-background to-background/20 pointer-events-none"/>
 </template>
