@@ -47,6 +47,22 @@ chmod +x "${TMP_DIR}/installer"
 echo "--> Running NoteWordy installer..."
 "${TMP_DIR}/installer"
 
+# Ensure system CA certificates are passed to the desktop application menu launcher
+DESKTOP_FILE="$HOME/.local/share/applications/NoteWordy.desktop"
+if [ -f "$DESKTOP_FILE" ]; then
+    for ca in \
+        /etc/ssl/certs/ca-certificates.crt \
+        /etc/pki/tls/certs/ca-bundle.crt \
+        /etc/ssl/ca-bundle.pem \
+        /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem \
+        /etc/ssl/cert.pem; do
+        if [ -f "$ca" ]; then
+            sed -i "s|^Exec=\([^e].*\)|Exec=env SSL_CERT_FILE=$ca \1|" "$DESKTOP_FILE"
+            break
+        fi
+    done
+fi
+
 echo ""
 echo "=========================================="
 echo " NoteWordy was installed successfully!"
