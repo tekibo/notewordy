@@ -3,6 +3,7 @@ import { Icon } from '@iconify/vue'
 
 const { wordsPerPage, setWordsPerPage, assameseMode, setAssameseMode, fontSize, setFontSize } = useSettings();
 const { refreshNotes } = useNotes();
+const { rpc } = useElectrobun();
 
 const open = shallowRef(false);
 const confirmImportOpen = shallowRef(false);
@@ -10,9 +11,9 @@ const backupOptionsOpen = shallowRef(false);
 const keyboardLayoutOpen = shallowRef(false);
 const includeSettings = ref(true);
 
-
 const handleBackup = async () => {
-    const success = await window.electron.notes.backup({
+    if (!rpc) return;
+    const success = await rpc.request.backupNotes({
         includeSettings: includeSettings.value
     });
     if (success) {
@@ -22,7 +23,8 @@ const handleBackup = async () => {
 }
 
 const handleImport = async () => {
-    const success = await window.electron.notes.import();
+    if (!rpc) return;
+    const success = await rpc.request.importNotes({});
     if (success) {
         await refreshNotes();
         confirmImportOpen.value = false;

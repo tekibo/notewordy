@@ -1,0 +1,22 @@
+{
+  "name": "@notewordy/transliterate_as",
+  "version": "1.0.0",
+  "description": "Phonetic Assamese transliteration engine",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.13.9",
+    "typescript": "^5.7.2"
+  },
+  "keywords": [
+    "assamese",
+    "transliterate",
+    "unicode"
+  ],
+  "author": "TEKIBO"
+}

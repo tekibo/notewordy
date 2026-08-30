@@ -1,4 +1,8 @@
 import tailwindcss from '@tailwindcss/vite'
+import { resolve } from 'node:path'
+import { electrobunViteAliases } from '../desktop/.hutch/devkit/api/config/electrobun-vite'
+
+const devkitRoot = resolve(__dirname, '../desktop/.hutch/devkit')
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
@@ -20,7 +24,7 @@ export default defineNuxtConfig({
   nitro: {
     preset: 'static',
     output: {
-      dir: 'dist-nuxt'
+      publicDir: resolve(__dirname, '../desktop/dist-web')
     }
   },
 
@@ -28,6 +32,9 @@ export default defineNuxtConfig({
     plugins: [
       tailwindcss(),
     ],
+    resolve: {
+      alias: electrobunViteAliases(devkitRoot),
+    },
     optimizeDeps: {
       include: [
         'reka-ui',

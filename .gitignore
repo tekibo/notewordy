@@ -7,6 +7,13 @@
 dist
 dist-nuxt
 dist-electron
+dist-web
+
+# Electrobun & Hutch outputs
+.hutch
+.cottontail-tmp
+build
+artifacts
 
 # Node dependencies
 node_modules

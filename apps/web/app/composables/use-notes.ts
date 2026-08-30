@@ -1,31 +1,37 @@
 import { formatForIpc, normalizeNote, sortNotes } from '~/lib/note-actions';
+import { APP_CONSTANTS } from '~/utils/constants';
+import type { Note } from '../../../desktop/src/shared/types';
 
 export function useNotes() {
-    const backend = window.electron;
-
-    const isReady = computedAsync(async () => await backend.electronReady());
     const route = useRoute();
+    const { rpc } = useElectrobun();
 
     const notes = useState<Note[]>('notes', () => []);
-
     const hasNotes = computed(() => notes.value.length > 0);
-
     const rawQuery = shallowRef("");
-
+    const loaded = useState<boolean>('notesLoaded', () => false);
 
     const refreshNotes = async () => {
-        if (!isReady.value) return;
+        if (!rpc) return;
 
-        const data = await backend.notes.list();
-        notes.value = data.map(normalizeNote);
-
-        sortNotes(notes.value);
+        try {
+            const data = await rpc.request.listNotes({});
+            notes.value = data.map(normalizeNote);
+            sortNotes(notes.value);
+            loaded.value = true;
+        } catch (e) {
+            console.error("Failed to list notes:", e);
+        }
     };
+
+    if (process.client && !loaded.value) {
+        refreshNotes();
+    }
 
     const { assameseMode } = useAssamese();
 
     const addNote = async () => {
-        if (!isReady.value) return;
+        if (!rpc) return;
 
         const defaultTitle = assameseMode.value ? APP_CONSTANTS.DEFAULT_TITLE_AS : APP_CONSTANTS.DEFAULT_TITLE_EN;
 
@@ -37,19 +43,35 @@ export function useNotes() {
             title: defaultTitle,
             content: "",
             createdAt: now.toISOString(),
-            updatedAt: now.toISOString()
+            updatedAt: now.toISOString(),
         });
 
         notes.value.push(newNote);
 
         try {
-            await backend.notes.save(JSON.parse(JSON.stringify(newNote)));
+            await rpc.request.saveNote({ note: JSON.parse(JSON.stringify(newNote)) });
             sortNotes(notes.value);
-            navigateTo(`/note/${id}`);
+            await navigateTo(`/note/${id}`);
         } catch (error) {
             notes.value = notes.value.filter((n) => n.id !== id);
             console.error("Failed to add note", error);
         }
+    };
+
+    const handleNewNote = async () => {
+        if (route.path.startsWith('/note/')) {
+            const currentId = route.params.id as string;
+            const currentNote = getNote(currentId);
+            const isEmpty = !currentNote || (!currentNote.content?.trim() && (
+                !currentNote.title?.trim() ||
+                currentNote.title === APP_CONSTANTS.DEFAULT_TITLE_EN ||
+                currentNote.title === APP_CONSTANTS.DEFAULT_TITLE_AS
+            ));
+            if (isEmpty) {
+                return;
+            }
+        }
+        await addNote();
     };
 
     const getNote = (id: string) => {
@@ -64,14 +86,16 @@ export function useNotes() {
         const note = getNote(id);
         if (!note) return;
 
+        if (!rpc) return;
+
         notes.value = notes.value.filter((n) => n.id !== id);
 
         try {
-            await backend.notes.delete(id);
+            await rpc.request.deleteNote({ id });
             sortNotes(notes.value);
 
             if (route.params.id === id) {
-                navigateTo('/');
+                await navigateTo('/');
             }
         } catch (error) {
             notes.value.push(note);
@@ -81,7 +105,7 @@ export function useNotes() {
     };
 
     const updateNote = async (updatedNote: Partial<Note>) => {
-        if (!isReady.value) return;
+        if (!rpc) return;
 
         const oldNotes = [...notes.value];
 
@@ -98,14 +122,13 @@ export function useNotes() {
         });
 
         try {
-            await backend.notes.saveAllNotes(formatForIpc(notes.value));
+            await rpc.request.saveAllNotes({ notes: formatForIpc(notes.value) });
             sortNotes(notes.value);
         } catch (error) {
             notes.value = oldNotes;
             console.error("Failed to save all notes", error);
         }
     };
-
 
     const _search = async (query: string) => {
         if (!query || query === "") {
@@ -127,6 +150,7 @@ export function useNotes() {
         hasNotes,
 
         addNote,
+        handleNewNote,
         deleteNote,
         updateNote,
 
@@ -136,7 +160,5 @@ export function useNotes() {
 
         searchNotes,
         rawQuery,
-
-        backendReady: isReady
     };
 }

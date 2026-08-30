@@ -1,15 +1,19 @@
 <script setup lang="ts">
 import { matchShortcut, type ShortcutId } from '~/utils/shortcuts';
 
-onMounted(() => {
-  window.electron.nuxtReady();
-})
-
-const { addNote } = useNotes();
+const { handleNewNote } = useNotes();
 const { setAssameseMode, assameseMode } = useSettings();
+const { shortcutsOpen, keyboardLayoutOpen } = useGlobalState();
+const { rpc } = useElectrobun();
+
+onMounted(() => {
+  if (rpc) {
+    rpc.request.nuxtReady({});
+  }
+});
 
 const handlers: Partial<Record<ShortcutId, () => void>> = {
-  'new-note': addNote,
+  'new-note': handleNewNote,
   'toggle-assamese': () => setAssameseMode(!assameseMode.value),
   'open-settings': () => navigateTo('/settings'),
   'open-converter': () => navigateTo('/converter'),
@@ -22,8 +26,6 @@ const handlers: Partial<Record<ShortcutId, () => void>> = {
   'open-keyboard-layout': () => keyboardLayoutOpen.value = true,
 };
 
-const {shortcutsOpen, keyboardLayoutOpen} = useGlobalState();
-
 const onKeydown = (e: KeyboardEvent) => {
   const id = matchShortcut(e);
   if (id && handlers[id]) {
@@ -34,14 +36,6 @@ const onKeydown = (e: KeyboardEvent) => {
 
 onMounted(() => window.addEventListener('keydown', onKeydown));
 onUnmounted(() => window.removeEventListener('keydown', onKeydown));
-
-const colorMode = useColorMode();
-watch(() => colorMode.value, (resolved) => {
-  if (window.electron?.setTitlebarOverlay) {
-    const isDark = resolved === 'dark';
-    window.electron.setTitlebarOverlay({ symbolColor: isDark ? '#fafafa' : '#09090b' });
-  }
-});
 </script>
 
 <template>

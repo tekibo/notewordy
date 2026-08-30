@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 
-const { addNote } = useNotes();
+const { handleNewNote } = useNotes();
 const keyboardLayoutOpen = shallowRef(false);
 const openKeyboardLayout = () => {
     keyboardLayoutOpen.value = true
@@ -29,7 +29,7 @@ const timeOfDay = computed(() => {
 
             <!-- Quick Actions Section -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-lg mx-auto animate-in fade-in slide-in-from-bottom-12 duration-1000">
-                <FunctionButton :on-click="addNote" name="New Note" description="Start a fresh document.">
+                <FunctionButton :on-click="handleNewNote" name="New Note" description="Start a fresh document.">
                     <template #icon>
                         <Icon icon="lucide:plus" class="w-5 h-5" />
                     </template>

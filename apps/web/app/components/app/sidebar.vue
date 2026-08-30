@@ -1,15 +1,12 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
 
-const { rawQuery, searchNotes, addNote, backendReady, refreshNotes } = useNotes();
+const { rawQuery, searchNotes, handleNewNote, refreshNotes } = useNotes();
 const { assameseMode, handleAssameseInput } = useAssamese();
 
-watch(backendReady, (ready) => {
-    if (ready) {
-        console.log("Backend is ready, refreshing notes...");
-        refreshNotes();
-    }
-})
+onMounted(() => {
+    refreshNotes();
+});
 
 </script>
 
@@ -27,10 +24,10 @@ watch(backendReady, (ready) => {
                 <Input v-model="rawQuery" placeholder="Search" data-search-input :class="{ 'font-as': assameseMode }"
                     @input="(e: Event) => { handleAssameseInput(e, (v) => rawQuery = v); searchNotes(rawQuery); }" />
                 <div class="flex gap-2 w-full">
-                    <Button class="flex-1" variant="secondary" @click="navigateTo('/')">
+                    <Button class="flex-1" variant="secondary" @click="handleNewNote" title="New Note">
                         <Icon icon="lucide:plus" class="w-4 h-4" />
                     </Button>
-                    <Button class="flex-1" variant="outline" @click="navigateTo('/converter')">
+                    <Button class="flex-1" variant="outline" @click="navigateTo('/converter')" title="Text Converter">
                         <Icon icon="lucide:repeat-2" class="w-4 h-4" />
                     </Button>
                 </div>

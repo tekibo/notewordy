@@ -1,13 +1,14 @@
 {
   "name": "notewordy",
   "private": true,
-  "packageManager": "pnpm@10.32.1+sha512.a706938f0e89ac1456b6563eab4edf1d1faf3368d1191fc5c59790e96dc918e4456ab2e67d613de1043d2e8c81f87303e6b40d4ffeca9df15ef1ad567348f2be",
   "scripts": {
-    "dev": "concurrently -k -s first -n \"NUXT,ELECTRON\" -c \"blue,green\" \"pnpm --filter @notewordy/web dev\" \"wait-on http://localhost:3000 && pnpm --filter @notewordy/desktop dev\"",
-    "build": "pnpm --filter @notewordy/web build",
-    "dist:mac": "pnpm build && pnpm --filter @notewordy/desktop dist:mac",
-    "dist:win": "pnpm build && pnpm --filter @notewordy/desktop dist:win",
-    "dist:linux": "pnpm build && pnpm --filter @notewordy/desktop dist:linux"
+    "dev": "concurrently -k -s first -n \"NUXT,ELECTROBUN\" -c \"blue,green\" \"pnpm --filter @notewordy/web dev\" \"wait-on http://localhost:3000 && pnpm --filter @notewordy/desktop dev\"",
+    "build:web": "pnpm --filter @notewordy/web generate",
+    "build": "pnpm build:web && pnpm --filter @notewordy/desktop build",
+    "build:dev": "pnpm build:web && pnpm --filter @notewordy/desktop build:dev",
+    "dist:linux": "pnpm build:web && pnpm --filter @notewordy/desktop build",
+    "dist:mac": "pnpm build:web && pnpm --filter @notewordy/desktop build",
+    "dist:win": "pnpm build:web && pnpm --filter @notewordy/desktop build"
   },
   "devDependencies": {
     "concurrently": "^9.2.1",

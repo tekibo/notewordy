@@ -1,0 +1,319 @@
+# Electrobun Webview Tag
+
+`&#x3C;electrobun-webview>` embeds a separate native `BrowserView` and keeps its
+position synchronized with an element in the host page. It behaves like an
+isolated iframe, but the embedded content is rendered by its own native
+webview rather than inside the host document.
+
+Import `electrobun/view` once in the host page. That module registers the
+custom element and augments TypeScript’s DOM types.
+
+- ```html
+&#x3C;electrobun-webview
+
+  id="documentation"
+
+  src="https://example.com"
+
+  sandbox
+
+  style="display: block; width: 100%; height: 480px"
+
+>&#x3C;/electrobun-webview>
+```
+
+```typescript
+import type { WebviewTagElement } from "electrobun/view";
+
+import "electrobun/view";
+
+const webview = document.querySelector("electrobun-webview");
+
+if (!webview) throw new Error("The embedded webview was not found");
+
+webview.on("dom-ready", () => {
+
+  console.log("Embedded content is ready", webview.webviewId);
+
+});
+
+webview.loadURL("https://example.com/docs");
+
+const typedWebview: WebviewTagElement = webview;
+
+void typedWebview;
+```
+
+## Attributes
+
+AttributeValuePurpose`src`URLInitial URL. Changing it navigates the webview.`html`HTML stringInitial inline document. Changing it loads the new HTML.`preload`JavaScript stringCode evaluated before the embedded page’s scripts.`partition`stringPersistent session/storage partition name.`renderer``native` or `cef`Renderer for this webview. Defaults to `native`.`sandbox`boolean attributeDisables Electrobun RPC in the child while retaining events and navigation controls.`transparent`boolean attributeStarts the native layer transparent.`passthrough`boolean attributeStarts with pointer input passing through to the host page.`spellcheck`boolean attributeEnables native WKWebView spell checking where supported.`masks`comma-separated selectorsCuts holes in the native layer for matching host elements.`navigation-rules`JSON string arrayInitial native navigation allow/block rules.
+Boolean attributes are enabled by their presence. For `spellcheck`, an
+explicit value of `"false"` is also treated as disabled.
+
+```html
+&#x3C;electrobun-webview
+
+  src="https://example.com"
+
+  renderer="cef"
+
+  partition="account-a"
+
+  sandbox
+
+  transparent
+
+  passthrough
+
+  masks=".toolbar, .popover"
+
+  navigation-rules='["^*", "https://example.com/*"]'
+
+>&#x3C;/electrobun-webview>
+```
+
+Set creation-only attributes such as `renderer`, `partition`, and `sandbox`
+before attaching the element to the document. Use the methods below for
+runtime changes.
+
+## Navigation
+
+```typescript
+import "electrobun/view";
+
+const webview = document.querySelector("electrobun-webview");
+
+if (!webview) throw new Error("The embedded webview was not found");
+
+webview.loadURL("https://example.com");
+
+webview.loadHTML("&#x3C;!doctype html>&#x3C;title>Inline document&#x3C;/title>&#x3C;h1>Hello&#x3C;/h1>");
+
+webview.reload();
+
+webview.goBack();
+
+webview.goForward();
+
+const [canGoBack, canGoForward] = await Promise.all([
+
+  webview.canGoBack(),
+
+  webview.canGoForward(),
+
+]);
+
+console.log({ canGoBack, canGoForward });
+```
+
+`setNavigationRules(rules)` applies rules in native code. `*` is a wildcard,
+`^` marks a blocking rule, and the last matching rule wins. With no matching
+rule, navigation is allowed.
+
+```typescript
+import "electrobun/view";
+
+const webview = document.querySelector("electrobun-webview");
+
+if (!webview) throw new Error("The embedded webview was not found");
+
+webview.setNavigationRules([
+
+  "^*",
+
+  "https://example.com/*",
+
+  "https://cdn.example.com/*",
+
+]);
+```
+
+An empty rules array restores the default allow behavior.
+
+## Visibility And Input
+
+The toggle methods accept an explicit state. Omit it to invert the current
+state.
+
+```typescript
+import "electrobun/view";
+
+const webview = document.querySelector("electrobun-webview");
+
+if (!webview) throw new Error("The embedded webview was not found");
+
+webview.toggleTransparent(true);
+
+webview.togglePassthrough(true);
+
+webview.toggleHidden(false);
+
+webview.syncDimensions(true);
+
+console.log({
+
+  transparent: webview.transparent,
+
+  passthrough: webview.passthroughEnabled,
+
+  hidden: webview.hidden,
+
+});
+```
+
+`syncDimensions(true)` forces an immediate geometry and mask update. Normal
+layout changes are synchronized automatically.
+
+## Mask Selectors
+
+The native webview is a separate layer above the host page, so ordinary
+`z-index` cannot place host DOM over it. A mask selector cuts rectangular
+holes in the native layer. Matching host elements then remain visible and
+receive input.
+
+```html
+&#x3C;div class="toolbar">Host controls&#x3C;/div>
+
+&#x3C;electrobun-webview
+
+  src="https://example.com"
+
+  sandbox
+
+  masks=".toolbar, .context-menu"
+
+>&#x3C;/electrobun-webview>
+```
+
+```typescript
+import "electrobun/view";
+
+const webview = document.querySelector("electrobun-webview");
+
+if (!webview) throw new Error("The embedded webview was not found");
+
+webview.addMaskSelector(".autocomplete");
+
+webview.removeMaskSelector(".autocomplete");
+
+console.log([...webview.maskSelectors]);
+```
+
+Each selector can match any number of elements. Invalid selectors are
+ignored. Masks use bounding rectangles; rounded corners and partial alpha do
+not alter the rectangular cutout.
+On Linux, passthrough and mask punch-through are unavailable for embedded
+views inside transparent `BrowserWindow`s. Use a non-transparent parent for
+those overlays. On Windows, WebView2 does not honor these overlay operations;
+set `bundleCEF: true` and use the CEF renderer when masks or passthrough are
+required.
+
+## Spell Check
+
+```typescript
+import "electrobun/view";
+
+const webview = document.querySelector("electrobun-webview");
+
+if (!webview) throw new Error("The embedded webview was not found");
+
+const supported = await webview.setSpellCheck(true);
+
+console.log({ supported, enabled: webview.spellCheckEnabled });
+```
+
+The promise resolves to `true` only when the current renderer supports the
+change. Native WKWebView on macOS is currently supported; other renderers
+return `false` without changing renderer state.
+
+## Find And Developer Tools
+
+```typescript
+import "electrobun/view";
+
+const webview = document.querySelector("electrobun-webview");
+
+if (!webview) throw new Error("The embedded webview was not found");
+
+webview.findInPage("Electrobun", { forward: true, matchCase: false });
+
+webview.stopFindInPage();
+
+webview.openDevTools();
+
+webview.closeDevTools();
+
+webview.toggleDevTools();
+
+webview.executeJavascript("document.documentElement.dataset.embedded = 'true'");
+```
+
+## Events
+
+Use `on` and `off` for custom-element events. A listener receives a
+`CustomEvent`; payload shape depends on the native event.
+
+```typescript
+import "electrobun/view";
+
+const webview = document.querySelector("electrobun-webview");
+
+if (!webview) throw new Error("The embedded webview was not found");
+
+const onNavigation = (event: CustomEvent) => {
+
+  console.log("Navigation payload", event.detail);
+
+};
+
+webview.on("did-navigate", onNavigation);
+
+webview.off("did-navigate", onNavigation);
+```
+
+Supported event names are:
+
+`will-navigate`
+
+- `did-navigate`
+
+- `did-navigate-in-page`
+
+- `did-commit-navigation`
+
+- `dom-ready`
+
+- `host-message`
+
+- `new-window-open`
+
+- `download-started`
+
+- `download-progress`
+
+- `download-completed`
+
+- `download-failed`
+
+- `load-started`
+
+- `load-committed`
+
+- `load-finished`
+
+Embedded content can emit a `host-message` from its preload script:
+
+```javascript
+window.__electrobunSendToHost({ type: "ready", documentTitle: document.title });
+```
+
+The host receives that value in the event detail. This event bridge remains
+available in sandbox mode; Electrobun RPC does not.
+
+## Properties
+
+PropertyTypeNotes`webviewId``number | null`Native view ID after initialization.`src``string | null`Attribute-backed URL.`html``string | null`Attribute-backed inline HTML.`preload``string | null`Attribute-backed preload source.`renderer``"native" | "cef"`Attribute-backed renderer.`sandbox``boolean`Read-only initialized sandbox state.`transparent``boolean`Current transparency state.`passthroughEnabled``boolean`Current input passthrough state.`spellCheckEnabled``boolean`Requested spell-check state.`hidden``boolean`Current native visibility state.`maskSelectors``Set&#x3C;string>`Active host-page mask selectors.
+
+The element also inherits standard `HTMLElement` properties such as `id`,
+`style`, and `dataset`.
+        [Previous  Electroview Class](/electrobun/apis/browser/electroview-class/) [Next  WGPU Tag](/electrobun/apis/browser/electrobun-wgpu-tag/)

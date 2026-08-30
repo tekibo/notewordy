@@ -19,8 +19,8 @@ const { handleAssameseInput } = useAssamese();
 </script>
 
 <template>
-    <div class="sticky top-0 flex w-full h-[42px] py-4 bg-background justify-between items-center drag pr-36 mb-9">
-        <div class="flex items-center gap-2 no-drag pl-2 min-w-0 flex-1">
+    <div class="sticky top-0 flex w-full h-[42px] py-4 bg-background justify-between items-center drag px-4 mb-9">
+        <div class="flex items-center gap-2 no-drag min-w-0 flex-1">
             <SidebarTrigger v-if="state === 'collapsed'" />
             <Input v-if="isNote" v-model="title"
                 class="h-8 min-w-0 max-w-xl flex-1 bg-card/80 dark:bg-card/60 text-sm shadow-sm"
