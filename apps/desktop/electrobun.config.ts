@@ -4,7 +4,7 @@ export default {
   app: {
     name: "NoteWordy",
     identifier: "com.tekibo.notewordy",
-    version: "0.0.2",
+    version: "0.0.1",
   },
   release: {
     baseUrl: "https://github.com/tekibo/notewordy/releases/latest/download",
