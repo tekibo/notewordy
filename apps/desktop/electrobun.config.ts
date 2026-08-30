@@ -19,9 +19,11 @@ export default {
 		},
 		linux: {
 			bundleCEF: false,
+			icon: "assets/logo.png",
 		},
 		win: {
 			bundleCEF: false,
+			icon: "assets/logo.png",
 		},
 	},
 } satisfies ElectrobunConfig;

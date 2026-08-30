@@ -59,23 +59,10 @@ jobs:
           EOF
           chmod +x AppDir/AppRun
 
-          # 4. Copy icon & desktop entry
-          cp apps/web/app/assets/logo.png AppDir/NoteWordy.png
-          cp apps/web/app/assets/logo.png AppDir/.DirIcon
-
-          # Fix icon path in desktop file if needed
-          if [ -f AppDir/NoteWordy.desktop ]; then
-            sed -i 's/^Icon=.*/Icon=NoteWordy/' AppDir/NoteWordy.desktop
-          else
-            cat << 'EOF' > AppDir/NoteWordy.desktop
-          [Desktop Entry]
-          Name=NoteWordy
-          Exec=NoteWordy
-          Icon=NoteWordy
-          Type=Application
-          Categories=Utility;TextEditor;
-          EOF
-          fi
+          # 4. Copy icons matching both desktop entry naming and AppImage conventions
+          cp apps/desktop/assets/logo.png AppDir/appIcon.png
+          cp apps/desktop/assets/logo.png AppDir/NoteWordy.png
+          cp apps/desktop/assets/logo.png AppDir/.DirIcon
 
           # 5. Build AppImage without FUSE requirement
           ./appimagetool --appimage-extract-and-run AppDir NoteWordy-x86_64.AppImage
