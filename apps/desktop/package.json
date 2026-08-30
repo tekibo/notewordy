@@ -9,9 +9,11 @@
     "build": "electrobun build --env=stable",
     "build:canary": "electrobun build --env=canary",
     "build:dev": "electrobun build --env=dev",
-    "prepare": "electrobun prepare"
+    "prepare": "electrobun prepare",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
+    "@types/bun": "latest",
     "@types/node": "^22.13.9",
     "electrobun": "2.0.1",
     "typescript": "^5.7.2"

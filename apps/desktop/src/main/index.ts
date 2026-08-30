@@ -2,11 +2,12 @@ import { BrowserView, BrowserWindow, ApplicationMenu } from "electrobun/main";
 import type { NotewordyRPC } from "../shared/types";
 import { listNotes, saveNote, saveAllNotes, deleteNote, backupNotes, importNotes } from "./notes";
 import { getSettings, saveSettings } from "./settings";
+import { checkForUpdates, applyUpdate, uninstallApp } from "./updater";
 
 let mainWindow: BrowserWindow | null = null;
 
 const notewordyRPC = BrowserView.defineRPC<NotewordyRPC>({
-    maxRequestTime: 30000,
+    maxRequestTime: 60000,
     handlers: {
         requests: {
             nuxtReady: () => {
@@ -23,6 +24,9 @@ const notewordyRPC = BrowserView.defineRPC<NotewordyRPC>({
             importNotes: () => importNotes(),
             getSettings: () => getSettings(),
             updateSettings: ({ settings }) => saveSettings(settings),
+            checkForUpdates: () => checkForUpdates(),
+            applyUpdate: () => applyUpdate(),
+            uninstallApp: ({ purgeData }) => uninstallApp({ purgeData }),
             windowMinimize: () => {
                 mainWindow?.minimize();
             },

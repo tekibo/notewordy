@@ -1,0 +1,86 @@
+name: Build & Release NoteWordy
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build ${{ matrix.target }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            target: linux-x64
+          - os: windows-latest
+            target: win-x64
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: "pnpm"
+
+      - name: Install Linux Build Dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libgtk-3-dev \
+            libwebkit2gtk-4.1-dev \
+            libappindicator3-dev
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Sync Version from Git Tag
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: bash
+        run: |
+          node -e '
+            const fs = require("fs");
+            const rawTag = process.env.RELEASE_TAG || "";
+            const version = rawTag.replace(/^v/, "").trim();
+            if (!version) process.exit(0);
+            const configPath = "apps/desktop/electrobun.config.ts";
+            let content = fs.readFileSync(configPath, "utf8");
+            content = content.replace(/version:\s*"[^"]+"/, `version: "${version}"`);
+            fs.writeFileSync(configPath, content);
+            console.log(`Synced ${configPath} version to ${version} from tag ${rawTag}`);
+          '
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+
+      - name: Build Application
+        run: pnpm build
+
+      - name: Upload Release Assets
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            apps/desktop/artifacts/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: NoteWordy-${{ matrix.target }}
+          path: apps/desktop/artifacts/*

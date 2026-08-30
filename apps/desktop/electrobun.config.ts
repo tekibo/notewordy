@@ -3,8 +3,11 @@ import type { ElectrobunConfig } from "electrobun";
 export default {
 	app: {
 		name: "NoteWordy",
-		identifier: "sh.blackboard.notewordy",
+		identifier: "com.tekibo.notewordy",
 		version: "0.0.1",
+	},
+	release: {
+		baseUrl: "https://github.com/tekibo/notewordy/releases/latest/download",
 	},
 	build: {
 		mainProcess: "cottontail",

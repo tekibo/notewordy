@@ -1,20 +1,18 @@
 {
-	"compilerOptions": {
-		"target": "ESNext",
-		"module": "ESNext",
-		"moduleResolution": "bundler",
-		"strict": true,
-		"esModuleInterop": true,
-		"skipLibCheck": true,
-		"forceConsistentCasingInFileNames": true,
-		"resolveJsonModule": true,
-		"sourceMap": true,
-		"paths": {
-			"electrobun": ["./.hutch/devkit/api/sdks/main/index.ts"],
-			"electrobun/main": ["./.hutch/devkit/api/sdks/main/index.ts"],
-			"electrobun/view": ["./.hutch/devkit/api/browser/index.ts"]
-		}
-	},
-	"include": ["src"],
-	"exclude": ["node_modules", "dist", "build"]
+  "extends": "./.hutch/devkit/tsconfig.json",
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "types": ["@types/bun"]
+  },
+  "include": [
+    "src",
+    "electrobun.config.ts",
+    "hutch.config.ts"
+  ],
+  "exclude": ["node_modules", "dist", "build", "dist-web"]
 }

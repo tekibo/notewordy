@@ -21,6 +21,18 @@ export type BackupPayload = {
     settings?: AppSettings;
 };
 
+export type UpdateCheckResult = {
+    currentVersion: string;
+    updateAvailable: boolean;
+    latestVersion?: string;
+    error?: string;
+};
+
+export type UpdateApplyResult = {
+    success: boolean;
+    error?: string;
+};
+
 export type NotewordyRPC = {
     bun: RPCSchema<{
         requests: {
@@ -59,6 +71,18 @@ export type NotewordyRPC = {
             updateSettings: {
                 params: { settings: Partial<AppSettings> };
                 response: { success: boolean };
+            };
+            checkForUpdates: {
+                params: {};
+                response: UpdateCheckResult;
+            };
+            applyUpdate: {
+                params: {};
+                response: UpdateApplyResult;
+            };
+            uninstallApp: {
+                params: { purgeData: boolean };
+                response: void;
             };
             windowMinimize: {
                 params: {};
